@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ CyberDetective: Neo-Persecución Global 🌐</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados y tipografía futurista */
+        .font-cyber-titulo {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.7), 0 0 15px rgba(0, 255, 255, 0.5); /* Efecto neón azul */
+        }
+        .font-cyber-mono {
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .bg-cyber-neon {
+            background: linear-gradient(135deg, #0f0a17 0%, #000000 100%); /* Fondo oscuro para resaltar neones */
+            /* Añadir patrón sutil de rejilla o circuito */
+            background-image: radial-gradient(circle at center, #1a0f2e 1px, transparent 1px),
+                              radial-gradient(circle at center, #1a0f2e 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+        .text-neon-blue {
+            color: #0ff; /* Cian brillante */
+            text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 15px #0ff, 0 0 20px #0ff;
+        }
+        .text-neon-pink {
+            color: #f0f; /* Magenta brillante */
+            text-shadow: 0 0 5px #f0f, 0 0 10px #f0f, 0 0 15px #f0f, 0 0 20px #f0f;
+        }
+        .text-neon-green {
+            color: #0f0; /* Verde brillante */
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+        }
+        .border-neon {
+            border-color: #0ff;
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.7), 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        .card-neon-hover:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 0 15px #f0f, 0 0 25px #f0f; /* Sombra neón pink en hover */
+            border-color: #f0f;
+            background-color: rgba(30, 0, 30, 0.6); /* Fondo ligeramente más oscuro con tono pink */
+        }
+        .btn-neon-blue {
+            background-color: #0ff;
+            color: #000;
+            text-shadow: none;
+            box-shadow: 0 0 8px #0ff, 0 0 15px #0ff;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-blue:hover {
+            background-color: #fff;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            transform: scale(1.05);
+        }
+        .btn-neon-pink {
+            background-color: #f0f;
+            color: #000;
+            text-shadow: none;
+            box-shadow: 0 0 8px #f0f, 0 0 15px #f0f;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-pink:hover {
+            background-color: #fff;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            transform: scale(1.05);
+        }
+        .btn-neon-green {
+            background-color: #0f0;
+            color: #000;
+            text-shadow: none;
+            box-shadow: 0 0 8px #0f0, 0 0 15px #0f0;
+            transition: all 0.3s ease;
+        }
+        .btn-neon-green:hover {
+            background-color: #fff;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            transform: scale(1.05);
+        }
+        .card-suspect-hover:hover {
+            box-shadow: 0 0 15px #0f0, 0 0 25px #0f0; /* Sombra neón green en hover */
+            border-color: #0f0;
+        }
+
+        /* Animación de brillo neón para el borde */
+        @keyframes neon-glow {
+            0% { box-shadow: 0 0 8px #0ff, 0 0 15px #0ff; border-color: #0ff; }
+            50% { box-shadow: 0 0 15px #f0f, 0 0 25px #f0f; border-color: #f0f; }
+            100% { box-shadow: 0 0 8px #0ff, 0 0 15px #0ff; border-color: #0ff; }
+        }
+        
+        /* Estilos del modal para la transición */
+        #feedback-modal {
+            transition: opacity 0.5s ease;
+        }
+        #modal-content {
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+<!-- El body usa Flexbox para centrar el contenido -->
+<body class="bg-cyber-neon min-h-screen flex items-center justify-center text-gray-100">
+
+    <!-- Nuevo Modal de Feedback (Pantalla de Error/Acierto) -->
+    <div id="feedback-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/95 backdrop-blur-sm hidden opacity-0">
+        <div class="p-10 rounded-xl text-center border-4 w-96 transform scale-90" id="modal-content">
+            <!-- Contenido dinámico inyectado por JS -->
+        </div>
+    </div>
+    
+    <!-- El contenedor principal utiliza mx-auto y my-4 para centrado horizontal y margen vertical -->
+    <div id="app" class="relative shadow-2xl rounded-xl w-full max-w-6xl p-6 md:p-12 border-4 border-neon bg-gray-900/80 backdrop-blur-sm mx-4 my-4">
+        
+        <div class="absolute inset-0 border-4 border-neon animate-pulse pointer-events-none rounded-xl" style="animation: neon-glow 1.5s ease-in-out infinite alternate;"></div>
+
+        <!-- Encabezado y Puntuación -->
+        <header class="text-center mb-10 border-b-2 pb-4 border-neon">
+            <h1 class="text-5xl md:text-6xl font-cyber-titulo text-neon-blue mb-3">
+                ⚡ CYBERDETECTIVE 🌐
+            </h1>
+            <p class="text-xl md:text-2xl mt-2 font-cyber-mono text-neon-pink">
+                <span class="animate-pulse">🚨</span> Caso: El Robo Cuántico del Milenio <span class="animate-pulse">🚨</span>
+            </p>
+            <div id="puntuacion" class="mt-6 text-3xl md:text-4xl font-cyber-mono bg-gray-900 border-2 border-neon p-4 rounded-full inline-block shadow-lg text-neon-green">
+                Puntos: 0 <span class="text-sm">bits</span>
+            </div>
+        </header>
+
+        <!-- Contenido Dinámico del Juego -->
+        <main id="game-content">
+            <div id="escena-actual">
+                <h2 class="text-3xl md:text-4xl font-cyber-titulo mb-6 text-neon-pink text-center">
+                    📡 ¡Datos de la Red! Pista rastreada desde [Base de Operaciones]...
+                </h2>
+                <!-- Texto principal con buen contraste (text-gray-300) -->
+                <p id="descripcion-robo" class="mb-8 text-lg md:text-xl text-gray-300 font-cyber-mono text-center leading-relaxed">
+                    Un artefacto invaluable ha sido sustraído. Analiza el rastro digital del fugitivo para predecir su próximo salto de red.
+                </p>
+                
+                <h3 class="text-2xl font-cyber-titulo mb-4 text-neon-blue">
+                    🔍 Pistas de Geolocalización 🛰️
+                </h3>
+                <div id="pistas-container" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    <!-- Pistas inyectadas por JS -->
+                </div>
+                
+                <h3 class="text-2xl font-cyber-titulo mb-4 text-neon-pink">
+                    🚀 ¿A qué nodo de red se ha conectado el fugitivo? (Enlace <span id="etapa-span">1</span> de 5)
+                </h3>
+                <div id="opciones-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Opciones de ciudades inyectadas por JS -->
+                </div>
+
+                <!-- Elementos de feedback y avance eliminados/ocultados, ahora lo hace el modal -->
+            </div>
+            
+            <div id="final-juego" class="hidden text-center">
+                <h2 class="text-4xl md:text-5xl font-cyber-titulo mb-6 text-neon-blue">
+                    🚨 ¡Intruso Localizado! Iniciando Protocolo de Identificación 👤
+                </h2>
+                <div id="sospechosos-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Sospechosos inyectados por JS -->
+                </div>
+                <!-- Este div se rellena con el mensaje final después de que el modal se cierre -->
+                <div id="resultado-final" class="mt-10 text-3xl md:text-4xl font-cyber-titulo"></div> 
+                <button onclick="iniciarJuego()" class="mt-8 btn-neon-pink text-lg font-bold py-3 px-8 rounded-full shadow-lg">
+                    🔄 Reiniciar Simulación
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Código JavaScript del Juego (Lógica Corregida para avance automático) -->
+    <script>
+        // *** 1. Definición de Datos del Juego ***
+        const CIUDADES_FAMOSAS = [
+            {
+                nombre: "Neo-Paris", pais: "Francia",
+                pistas: {
+                    geografia: "Su *skyline* está dominado por la reestructurada Torre Eifel y un río iluminado por neones. 🗼💧",
+                    cultura: "Hogar de la 'Galería Holográfica del Louvre' y un exquisito arte callejero *cyberpunk*. 🎨🤖",
+                    historia: "La ciudad donde la IA de la Revolución Francesa se rebeló por primera vez. 📜⚡"
+                },
+                trivia: "Los taxis voladores de Neo-París funcionan con energía de fusión fría, haciendo sus cielos notablemente silenciosos.",
+                coordenadas: [48.8566, 2.3522]
+            },
+            {
+                nombre: "Roma Data-Center", pais: "Italia",
+                pistas: {
+                    geografia: "Construida sobre las ruinas de las Siete Colinas y alimentada por un reactor geotérmico. 🌋🔌",
+                    cultura: "El Coliseo ahora es un anfiteatro de batallas de *mechas* y sus *gelaterias* sirven helado sintético. 🍦🤖",
+                    historia: "Donde el Imperio Digital se forjó a partir de los antiguos códigos romanos. 🏛️💾"
+                },
+                trivia: "Las catacumbas bajo Roma Data-Center albergan los servidores de respaldo de la World Wide Web 2.0.",
+                coordenadas: [41.9028, 12.4964]
+            },
+            {
+                nombre: "Tokio MetropoliX", pais: "Japón",
+                pistas: {
+                    geografia: "Una megaciudad flotante, con niveles subterráneos de mercados negros de *wetware*. 🏙️☔",
+                    cultura: "Famosa por sus hologramas de Shibuya y los conciertos de ídolos virtuales. 🎤✨",
+                    historia: "Antiguamente Edo, es la cuna de los clanes *Yakuza* del ciberespacio. ⛩️👤"
+                },
+                trivia: "El 80% de la población de Tokio MetropoliX vive en 'cápsulas verticales' para optimizar el espacio.",
+                coordenadas: [35.6895, 139.6917]
+            },
+            {
+                nombre: "Río Ciber-Janeiro", pais: "Brasil",
+                pistas: {
+                    geografia: "Sus favelas están construidas sobre redes de fibra óptica y su Cristo es un faro de energía. ⚡🏞️",
+                    cultura: "El Carnaval es ahora un festival de avatares con realidad aumentada y *drum 'n' bass*. 🥁🎉",
+                    historia: "Fue el primer centro de investigación de *biotecnología* en la era digital. 🔬🧬"
+                },
+                trivia: "Las playas de Copacabana en Río Ciber-Janeiro están cubiertas de arena sintética que brilla en la oscuridad.",
+                coordenadas: [-22.9068, -43.1729]
+            },
+            {
+                nombre: "Estambul Interconector", pais: "Turquía",
+                pistas: {
+                    geografia: "El Bósforo está cruzado por puentes de energía, conectando circuitos de dos continentes. 🌉🔗",
+                    cultura: "Hagia Sofía es ahora un museo de simulaciones históricas y el Gran Bazar, un mercado de datos. 🛍️📡",
+                    historia: "Fue el punto de convergencia de las rutas comerciales de información en el siglo XXI. 📜🌐"
+                },
+                trivia: "Los drones de transporte de Estambul Interconector han reemplazado a todos los vehículos terrestres.",
+                coordenadas: [41.0082, 28.9784]
+            },
+             {
+                nombre: "Shanghái N.E.O.", pais: "China",
+                pistas: {
+                    geografia: "Una ciudad vertical con jardines hidropónicos en cada nivel y surcada por vías de maglev. 🚄🌱",
+                    cultura: "Hogar de la Ópera de Proyecciones Holográficas y el Festival de los Dragones de Luz. 🐲✨",
+                    historia: "El centro de la Alianza Comercial del Pacífico y donde se desarrolló la primera red neural urbana. 🌐🧠"
+                },
+                trivia: "Los edificios más altos de Shanghái N.E.O. alcanzan la estratosfera, con 'pisos' residenciales en las nubes.",
+                coordenadas: [31.2304, 121.4737]
+            },
+            {
+                nombre: "Dubai Stellar Port", pais: "EAU",
+                pistas: {
+                    geografia: "Construida en un desierto artificial, su puerto espacial es el más grande del sector. 🚀🏜️",
+                    cultura: "Conocida por sus opulentos hoteles *zero-gravity* y carreras de *hovercrafts*. 🏎️🌌",
+                    historia: "Fue la primera ciudad en establecer una embajada para especies no-terrestres. 👽🌍"
+                },
+                trivia: "La pirámide invertida del centro de Dubai Stellar Port alberga un ecosistema submarino biodiverso.",
+                coordenadas: [25.2048, 55.2708]
+            }
+        ];
+
+        const SOSPECHOSOS = [
+            { nombre: "Cipher-Maestro", descripcion: "Un enigmático hacker, capaz de manipular cualquier red de datos.", esCulpable: true, emoji: "💻" },
+            { nombre: "Ghost-Protocol", descripcion: "Ex-agente de contrainteligencia, especializado en sigilo digital.", esCulpable: false, emoji: "👤" },
+            { nombre: "Dr. Chronos", descripcion: "Un brillante (y excéntrico) físico teórico, obsesionado con la paradoja del tiempo.", esCulpable: false, emoji: "🕰️" }
+        ];
+
+        // *** 2. Variables de Estado del Juego ***
+        let puntuacion = 0;
+        let etapaActual = 0; // 0 a 4 (5 etapas) - El índice de la ciudad a adivinar.
+        let destinoCorrecto = null;
+        let ciudadesParaPersecucion = []; // La secuencia de 5 ciudades a adivinar.
+
+        // *** 3. Funciones de Lógica del Juego ***
+
+        // Inicializa el juego
+        function iniciarJuego() {
+            puntuacion = 0;
+            etapaActual = 0;
+            
+            // Selecciona 5 ciudades únicas al azar para la persecución
+            ciudadesParaPersecucion = seleccionarCiudadesAlAzar(CIUDADES_FAMOSAS, 5);
+            
+            document.getElementById('final-juego').classList.add('hidden');
+            document.getElementById('escena-actual').classList.remove('hidden');
+            document.getElementById('etapa-span').textContent = '1';
+            
+            // Limpiar mensaje final si se reinicia
+            document.getElementById('resultado-final').innerHTML = ''; 
+            
+            actualizarPuntuacion();
+            avanzarEtapa();
+        }
+
+        // Obtiene N elementos únicos de un array
+        function seleccionarCiudadesAlAzar(array, n) {
+            const mezclado = array.sort(() => 0.5 - Math.random());
+            return mezclado.slice(0, n);
+        }
+
+        // Avanza a la siguiente ciudad/etapa de la persecución
+        function avanzarEtapa() {
+            if (etapaActual >= ciudadesParaPersecucion.length) {
+                // Fin de la persecución
+                mostrarFinal();
+                return;
+            }
+
+            // La ciudad a adivinar en esta etapa.
+            const ciudadObjetivo = ciudadesParaPersecucion[etapaActual];
+            destinoCorrecto = ciudadObjetivo;
+
+            // La ciudad que usamos como contexto anterior.
+            const ciudadAnterior = etapaActual > 0 
+                ? ciudadesParaPersecucion[etapaActual - 1].nombre // Última adivinada correctamente
+                : "[Base de Operaciones]"; // Primera etapa
+
+            // Generar 2 ciudades falsas (que no sean la objetivo ni ninguna de las ya definidas en la secuencia)
+            const ciudadesDisponibles = CIUDADES_FAMOSAS.filter(c => 
+                c.nombre !== ciudadObjetivo.nombre && 
+                !ciudadesParaPersecucion.slice(0, etapaActual).some(pc => pc.nombre === c.nombre)
+            );
+            
+            const opcionesFalsas = seleccionarCiudadesAlAzar(ciudadesDisponibles, 2);
+            
+            let opciones = [destinoCorrecto, ...opcionesFalsas];
+            opciones = opciones.sort(() => 0.5 - Math.random()); // Mezclar las opciones
+
+            // Renderizar la interfaz con las pistas de la ciudad OBJETIVO
+            renderizarEtapa(ciudadObjetivo, opciones, ciudadAnterior);
+            
+            document.getElementById('etapa-span').textContent = `${etapaActual + 1} de ${ciudadesParaPersecucion.length}`;
+            
+            // Re-habilitar botones 
+            document.querySelectorAll('.opcion-ciudad').forEach(btn => btn.disabled = false);
+        }
+
+        // Muestra el modal de feedback para las etapas de ciudad y maneja el avance automático
+        function mostrarFeedbackModal(esCorrecta, ciudadSeleccionadaObj, puntosGanados) {
+            const modal = document.getElementById('feedback-modal');
+            const content = document.getElementById('modal-content');
+            let feedbackHTML = '';
+            let bgColorClass = '';
+            let textColorClass = '';
+            
+            const destino = destinoCorrecto; // La ciudad correcta
+            
+            // Pistas adicionales sobre la ciudad seleccionada
+            const triviaInfo = `<p class="text-sm font-cyber-mono text-gray-400 mt-2">${ciudadSeleccionadaObj.trivia}</p>`;
+
+            if (esCorrecta) {
+                bgColorClass = 'bg-green-900/80 border-neon-green';
+                textColorClass = 'text-neon-green';
+                feedbackHTML = `
+                    <span class="text-6xl block mb-4 animate-pulse">✅</span>
+                    <h3 class="text-4xl font-cyber-titulo ${textColorClass} mb-3">¡CONEXIÓN ESTABLE!</h3>
+                    <p class="text-xl font-cyber-mono text-gray-200">Rastreado a: <span class="text-neon-blue">${destino.nombre}</span>.</p>
+                    ${triviaInfo}
+                    <p class="text-3xl font-cyber-titulo mt-6 ${textColorClass}">+${puntosGanados} bits</p>
+                `;
+            } else {
+                bgColorClass = 'bg-red-900/80 border-neon-pink';
+                textColorClass = 'text-neon-pink';
+                feedbackHTML = `
+                    <span class="text-6xl block mb-4 animate-pulse">❌</span>
+                    <h3 class="text-4xl font-cyber-titulo ${textColorClass} mb-3">¡ERROR DE RASTREO!</h3>
+                    <p class="text-xl font-cyber-mono text-gray-200">El nodo <span class="text-neon-blue">${ciudadSeleccionadaObj.nombre}</span> era una trampa.</p>
+                    ${triviaInfo}
+                    <p class="text-3xl font-cyber-titulo mt-6 ${textColorClass}">${puntosGanados} bits (Penalización)</p>
+                `;
+            }
+
+            content.className = `p-10 rounded-xl text-center border-4 w-full max-w-lg transform scale-90 ${bgColorClass}`;
+            content.innerHTML = feedbackHTML;
+
+            // Mostrar modal con animación
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.replace('scale-90', 'scale-100');
+            }, 10); // Pequeño delay para iniciar la transición
+
+            // Esperar 2.5 segundos y avanzar la etapa automáticamente
+            setTimeout(() => {
+                // Ocultar modal con animación
+                modal.classList.add('opacity-0');
+                content.classList.replace('scale-100', 'scale-90');
+                
+                // Esperar a que termine la transición (500ms) antes de cambiar de etapa
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    avanzarEtapa();
+                }, 500); 
+
+            }, 2500); // 2.5 segundos de visualización
+        }
+
+        // Muestra el modal de feedback final (sin avance de etapa)
+        function mostrarFeedbackFinalModal(esCulpable, nombreSeleccionado, puntuacionFinal) {
+            const modal = document.getElementById('feedback-modal');
+            const content = document.getElementById('modal-content');
+            const resultadoDiv = document.getElementById('resultado-final');
+
+            let feedbackHTML = '';
+            let bgColorClass = '';
+            let textColorClass = '';
+            let finalMessageHTML = '';
+            
+            if (esCulpable) {
+                bgColorClass = 'bg-green-900/80 border-neon-green';
+                textColorClass = 'text-neon-green';
+                feedbackHTML = `
+                    <span class="text-6xl block mb-4 animate-pulse">🏆</span>
+                    <h3 class="text-4xl font-cyber-titulo ${textColorClass} mb-3">¡PROTOCOLO EJECUTADO!</h3>
+                    <p class="text-xl font-cyber-mono text-gray-200">Has capturado a <span class="text-neon-blue">${nombreSeleccionado}</span> y recuperado el artefacto.</p>
+                    <p class="text-3xl font-cyber-titulo mt-6 ${textColorClass}">Puntuación Final: ${puntuacionFinal} bits</p>
+                `;
+                finalMessageHTML = `🏆 ¡PROTOCOLO EJECUTADO! Has capturado a <span class="text-neon-blue">${nombreSeleccionado}</span> y recuperado el artefacto. Puntuación Final: ${puntuacionFinal} bits`;
+            } else {
+                bgColorClass = 'bg-red-900/80 border-neon-pink';
+                textColorClass = 'text-neon-pink';
+                feedbackHTML = `
+                    <span class="text-6xl block mb-4 animate-pulse">⚠️</span>
+                    <h3 class="text-4xl font-cyber-titulo ${textColorClass} mb-3">¡FALLO CRÍTICO!</h3>
+                    <p class="text-xl font-cyber-mono text-gray-200"><span class="text-neon-blue">${nombreSeleccionado}</span> era inocente. El ciber-ladrón ha escapado.</p>
+                    <p class="text-3xl font-cyber-titulo mt-6 ${textColorClass}">Puntuación Final: ${puntuacionFinal} bits</p>
+                `;
+                finalMessageHTML = `⚠️ ¡FALLO CRÍTICO! <span class="text-neon-blue">${nombreSeleccionado}</span> es inocente y el verdadero ciber-ladrón ha escapado al vacío. Puntuación Final: ${puntuacionFinal} bits`;
+            }
+
+            content.className = `p-10 rounded-xl text-center border-4 w-full max-w-lg transform scale-90 ${bgColorClass}`;
+            content.innerHTML = feedbackHTML;
+
+            // Mostrar modal con animación
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.replace('scale-90', 'scale-100');
+            }, 10);
+
+            // Preparar el mensaje final del juego para que aparezca cuando el modal se cierre
+            resultadoDiv.className = `mt-10 text-4xl md:text-5xl font-cyber-titulo ${textColorClass} animate-pulse`;
+            resultadoDiv.innerHTML = finalMessageHTML;
+
+
+            // Esperar 3 segundos, cerrar el modal y dejar el mensaje final visible.
+            setTimeout(() => {
+                // Ocultar modal con animación
+                modal.classList.add('opacity-0');
+                content.classList.replace('scale-100', 'scale-90');
+                
+                // Esperar a que termine la transición (500ms)
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 500); 
+
+            }, 3000); // Se da un poco más de tiempo para el resultado final
+        }
+
+
+        // Actualiza el marcador de puntos
+        function actualizarPuntuacion(puntosGanados = 0) {
+            puntuacion += puntosGanados;
+            document.getElementById('puntuacion').textContent = `Puntos: ${puntuacion} bits`;
+        }
+
+        // Dibuja las pistas y opciones de la etapa actual
+        function renderizarEtapa(ciudad, opciones, ciudadAnterior) {
+            const pistasContainer = document.getElementById('pistas-container');
+            const opcionesContainer = document.getElementById('opciones-container');
+            pistasContainer.innerHTML = '';
+            opcionesContainer.innerHTML = '';
+
+            // Actualiza el título de las pistas con contexto
+            document.querySelector('#escena-actual h3:first-of-type').innerHTML = `🔍 Pistas de Geolocalización (Generadas desde <span class="text-neon-blue">${ciudadAnterior}</span>) 🛰️`;
+
+            // Generar Pistas
+            const tiposPista = [
+                { key: 'geografia', icono: '🗺️' }, 
+                { key: 'cultura', icono: '🎭' }, 
+                { key: 'historia', icono: '📜' }
+            ];
+            tiposPista.forEach(tipo => {
+                const pistaTexto = ciudad.pistas[tipo.key];
+                const pistaHTML = `
+                    <div class="card-neon-hover bg-gray-900/70 p-5 rounded-lg shadow-xl border-2 border-neon text-center transform hover:scale-105 transition duration-300">
+                        <h4 class="font-bold text-xl font-cyber-titulo text-neon-blue mb-2">${tipo.icono} ${tipo.key.toUpperCase()}</h4>
+                        <!-- Texto de pista con mejor contraste (text-gray-200) -->
+                        <p class="mt-1 text-sm text-gray-200 font-cyber-mono">${pistaTexto}</p>
+                    </div>
+                `;
+                pistasContainer.innerHTML += pistaHTML;
+            });
+
+            // Generar Opciones de Ciudad
+            opciones.forEach(opcion => {
+                const opcionHTML = `
+                    <button data-ciudad="${opcion.nombre}" 
+                            class="opcion-ciudad btn-neon-pink font-cyber-titulo text-lg md:text-xl font-bold py-4 px-4 rounded-lg shadow-2xl uppercase tracking-wider transform hover:scale-105 transition duration-300">
+                        ${opcion.nombre} <span class="text-gray-900/50">(${opcion.pais})</span>
+                    </button>
+                `;
+                opcionesContainer.innerHTML += opcionHTML;
+            });
+            
+            // Asignar evento a los botones de opción
+            document.querySelectorAll('.opcion-ciudad').forEach(button => {
+                button.addEventListener('click', manejarRespuestaCiudad);
+            });
+        }
+
+        // Maneja la selección de ciudad
+        function manejarRespuestaCiudad(event) {
+            // Usar currentTarget en lugar de target para asegurar que obtenemos el botón, no un hijo
+            const button = event.currentTarget; 
+            const ciudadSeleccionada = button.getAttribute('data-ciudad');
+            
+            // Deshabilitar botones de opción para evitar clics múltiples mientras está el modal
+            document.querySelectorAll('.opcion-ciudad').forEach(btn => {
+                btn.disabled = true;
+                // Resaltar la opción seleccionada
+                if (btn.getAttribute('data-ciudad') === ciudadSeleccionada) {
+                    btn.classList.add('ring-4', 'ring-offset-2', 'ring-offset-gray-900', 'ring-cyan-500');
+                }
+            });
+
+            const esCorrecta = ciudadSeleccionada === destinoCorrecto.nombre;
+            const ciudadSeleccionadaObj = CIUDADES_FAMOSAS.find(c => c.nombre === ciudadSeleccionada);
+            
+            let puntosGanados = esCorrecta ? 100 : -50;
+            actualizarPuntuacion(puntosGanados);
+
+            // Ajustar el estilo del botón seleccionado
+            if (esCorrecta) {
+                etapaActual++; // Solo avanzamos la etapa si la respuesta es correcta.
+                button.classList.replace('btn-neon-pink', 'btn-neon-green');
+            } else {
+                button.classList.replace('btn-neon-pink', 'bg-red-900/80');
+                button.style.boxShadow = 'none';
+            }
+
+            // Mostrar el modal de feedback que maneja el avance automático
+            mostrarFeedbackModal(esCorrecta, ciudadSeleccionadaObj, puntosGanados);
+        }
+        
+        // Muestra la escena final de identificación del ladrón
+        function mostrarFinal() {
+            document.getElementById('escena-actual').classList.add('hidden');
+            const finalDiv = document.getElementById('final-juego');
+            finalDiv.classList.remove('hidden');
+            
+            const sospechososContainer = document.getElementById('sospechosos-container');
+            sospechososContainer.innerHTML = '';
+            document.getElementById('resultado-final').innerHTML = ''; // Limpiar mensaje final antes de la elección
+
+            SOSPECHOSOS.forEach(sospechoso => {
+                const sospechosoHTML = `
+                    <button data-sospechoso="${sospechoso.nombre}" 
+                            class="sospechoso-btn bg-gray-900/70 hover:bg-purple-900 border-2 border-neon text-white font-bold py-5 px-4 rounded-lg shadow-xl card-suspect-hover text-center transition duration-300 transform hover:scale-105">
+                        <span class="text-5xl block mb-2">${sospechoso.emoji}</span>
+                        <span class="font-bold block text-2xl font-cyber-titulo text-neon-green">${sospechoso.nombre}</span>
+                        <span class="text-sm block text-gray-400 font-cyber-mono mt-2">${sospechoso.descripcion}</span>
+                    </button>
+                `;
+                sospechososContainer.innerHTML += sospechosoHTML;
+            });
+            
+            document.querySelectorAll('.sospechoso-btn').forEach(button => {
+                button.addEventListener('click', manejarRespuestaFinal);
+            });
+        }
+        
+        // Maneja la selección del sospechoso (Usando modal final)
+        function manejarRespuestaFinal(event) {
+            const button = event.currentTarget;
+            const nombreSeleccionado = button.getAttribute('data-sospechoso');
+            const sospechoso = SOSPECHOSOS.find(s => s.nombre === nombreSeleccionado);
+            
+            // Deshabilitar botones
+            document.querySelectorAll('.sospechoso-btn').forEach(btn => btn.disabled = true);
+
+            const esCulpable = sospechoso.esCulpable;
+            let puntosGanados = esCulpable ? 500 : -200;
+            
+            actualizarPuntuacion(puntosGanados);
+
+            // Visual feedback en el botón
+            if (esCulpable) {
+                button.classList.replace('bg-gray-900/70', 'btn-neon-green');
+            } else {
+                button.classList.replace('bg-gray-900/70', 'bg-red-900');
+                button.style.boxShadow = 'none';
+            }
+            
+            // Mostrar el modal de feedback final
+            mostrarFeedbackFinalModal(esCulpable, nombreSeleccionado, puntuacion);
+        }
+
+        document.addEventListener('DOMContentLoaded', iniciarJuego);
+
+    </script>
+</body>
+</html>
